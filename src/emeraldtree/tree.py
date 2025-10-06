@@ -667,7 +667,7 @@ class ElementTree:
 
 def tostring(element, encoding=None, method=None):
     data = tostringlist(element, encoding, method)
-    return "".join(data)
+    return b"".join(data)
 
 ##
 # Generates a string representation of an XML element, including all
