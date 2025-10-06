@@ -39,11 +39,11 @@ build-backend = "setuptools.build_meta"
 write_to = "src/emeraldtree/_version.py"
 
 [tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py{39,310,311,312,313,314}
+requires = ["tox>=4"]
+env_list = ["py39", "py310", "py311", "py312", "py313", "py314"]
 
-[testenv]
-deps = pytest
-commands = pytest -rs --pyargs {posargs:emeraldtree}
-"""
+[tool.tox.env.py]
+deps = ["pytest"]
+commands = [
+    ["pytest", "-rs", "--pyargs", "{posargs:emeraldtree}"]
+]
