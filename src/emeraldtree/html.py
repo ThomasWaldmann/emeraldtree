@@ -93,9 +93,10 @@ class HTMLParser(HTMLParserBase):
                 elif k == "content":
                     content = v
             if http_equiv == "content-type" and content:
-                import cgi
-                _, params = cgi.parse_header(content)
-                encoding = params.get('charset')
+                from email.message import Message
+                msg = Message()
+                msg['content-type'] = content
+                encoding = msg.get_param('charset', header='content-type')
                 if encoding:
                     self.encoding = encoding
         if tag.name in self.AUTOCLOSE:
