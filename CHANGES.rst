@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+Version 0.12.0 (not released yet)
+---------------------------------
+
+Other changes:
+
+- support Python 3.13 and 3.14, drop support for Python 3.9
+- switch to SPDX license identifier
+- use native ``pyproject.toml`` support in tox
+- add scripts for sdist, signing, and PyPI upload
+
 Version 0.11.0 (2024-04-05)
 ---------------------------
 
