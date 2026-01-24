@@ -355,7 +355,8 @@ class Element(Node):
                 for e in e.iter(tag):
                     yield e
             else:
-                yield e
+                if tag is None:
+                    yield e
 
     ##
     # Creates a text iterator.  The iterator loops over this element

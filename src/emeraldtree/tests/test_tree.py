@@ -184,7 +184,6 @@ def test_Element_findall_dotdot():
     assert result[1] is c2
 
 def test_Element_findall_slashslash():
-    pytest.skip('broken')
     c1 = Element('c')
     c2 = Element('c')
     text = "text"
@@ -199,7 +198,6 @@ def test_Element_findall_slashslash():
     assert result[1] is c2
 
 def test_Element_findall_dotslashslash():
-    pytest.skip('broken')
     c1 = Element('c')
     c2 = Element('c')
     text = "text"
