@@ -121,6 +121,9 @@ class Element(Node):
 
     attrib = None
 
+    # Parent pointer (internal). None for root or detached elements.
+    _parent = None
+
     ##
     # (Attribute) Text before first subelement.  This is either a
     # string or the value None, if there was no text.
@@ -151,6 +154,10 @@ class Element(Node):
         self.tag = tag
         self.attrib = attrib
         self._children = list(children)
+        # set parent pointers for element children
+        for ch in self._children:
+            if isinstance(ch, Element):
+                ch._parent = self
 
     def __repr__(self):
         return "<Element {} at {:x}>".format(repr(self.tag), id(self))
@@ -186,7 +193,34 @@ class Element(Node):
     # @exception AssertionError If element is not a valid object.
 
     def __setitem__(self, index, element):
-        self._children.__setitem__(index, element)
+        # clear parent of replaced children and set parent of new ones
+        if isinstance(index, slice):
+            # clear parents for removed elements
+            old_items = self._children[index]
+            for old in old_items:
+                if isinstance(old, Element):
+                    old._parent = None
+            # assign
+            self._children[index] = element
+            # set parents for new elements
+            try:
+                iterator = iter(element)
+            except TypeError:
+                iterator = None
+            if iterator is not None:
+                for new in element:
+                    if isinstance(new, Element):
+                        new._parent = self
+        else:
+            try:
+                old = self._children[index]
+            except Exception:
+                old = None
+            if isinstance(old, Element):
+                old._parent = None
+            self._children[index] = element
+            if isinstance(element, Element):
+                element._parent = self
 
     ##
     # Deletes the given subelement.
@@ -195,6 +229,19 @@ class Element(Node):
     # @exception IndexError If the given element does not exist.
 
     def __delitem__(self, index):
+        # clear parent pointer for removed element(s)
+        if isinstance(index, slice):
+            old_items = self._children[index]
+            for old in old_items:
+                if isinstance(old, Element):
+                    old._parent = None
+        else:
+            try:
+                old = self._children[index]
+            except Exception:
+                old = None
+            if isinstance(old, Element):
+                old._parent = None
         self._children.__delitem__(index)
 
     ##
@@ -205,6 +252,8 @@ class Element(Node):
 
     def append(self, element):
         self._children.append(element)
+        if isinstance(element, Element):
+            element._parent = self
 
     ##
     # Appends subelements from a sequence.
@@ -215,6 +264,9 @@ class Element(Node):
 
     def extend(self, elements):
         self._children.extend(elements)
+        for e in elements:
+            if isinstance(e, Element):
+                e._parent = self
 
     ##
     # Inserts a subelement at the given position in this element.
@@ -224,6 +276,8 @@ class Element(Node):
 
     def insert(self, index, element):
         self._children.insert(index, element)
+        if isinstance(element, Element):
+            element._parent = self
 
     ##
     # Removes a matching subelement.  Unlike the <b>find</b> methods,
@@ -236,11 +290,16 @@ class Element(Node):
 
     def remove(self, element):
         self._children.remove(element)
+        if isinstance(element, Element):
+            element._parent = None
 
     ##
     # Removes all subelements.
 
     def remove_all(self):
+        for ch in self._children:
+            if isinstance(ch, Element):
+                ch._parent = None
         self._children = []
 
     ##

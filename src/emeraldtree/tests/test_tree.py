@@ -170,7 +170,6 @@ def test_Element_findall_bracketed_tag():
     assert result[0] is b1 # b1 has 'c' childs
 
 def test_Element_findall_dotdot():
-    pytest.skip('broken')
     c1 = Element('c')
     c2 = Element('c')
     text = "text"

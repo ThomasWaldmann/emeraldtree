@@ -102,15 +102,22 @@ def prepare_iter(next, token):
 
 def prepare_dot_dot(next, token):
     def select(context, result):
-        parent_map = context.parent_map
-        if parent_map is None:
-            context.parent_map = parent_map = {}
-            for p in context.root.iter():
-                for e in p:
-                    parent_map[e] = p
         for elem in result:
-            if elem in parent_map:
-                yield parent_map[elem]
+            parent = getattr(elem, '_parent', None)
+            if parent is not None:
+                yield parent
+            else:
+                if context.parent_map is None:
+                    context.parent_map = {}
+                    for p in context.root.iter():
+                        try:
+                            iter(p)
+                        except TypeError:
+                            continue
+                        for e in p:
+                            context.parent_map[e] = p
+                if elem in context.parent_map:
+                    yield context.parent_map[elem]
     return select
 
 def prepare_predicate(next, token):
