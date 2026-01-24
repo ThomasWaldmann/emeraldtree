@@ -5,23 +5,23 @@ readme = "README.rst"
 authors = [{name="Bastian Blank", email="bblank@thinkmo.de"}, ]
 maintainers = [{name="Thomas Waldmann", email="tw@waldmann-edv.de"}, ]
 description = "EmeraldTree - a light-weight XML object model for Python."
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["xml", "html", "html5", "polyglot", "element", "tree", "dom", "unicode"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: Python Software Foundation License",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Intended Audience :: Developers",
     "Topic :: Text Processing :: Markup :: HTML",
     "Topic :: Text Processing :: Markup :: XML",
 ]
-license = {text="Python (MIT style)"}
+license = "HPND-sell-variant"  # aka "Python (MIT Style)" or "Elementtree" license
 
 [project.urls]
 "Homepage" = "https://github.com/moinwiki/emeraldtree"
@@ -30,18 +30,18 @@ license = {text="Python (MIT style)"}
 where = ["src"]
 
 [build-system]
-requires = ["setuptools", "wheel", "setuptools_scm[toml]"]
+requires = ["setuptools>=78.1.1", "wheel", "setuptools_scm[toml]"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 write_to = "src/emeraldtree/_version.py"
 
 [tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py{39,310,311,312}
+requires = ["tox>=4"]
+env_list = ["py310", "py311", "py312", "py313", "py314"]
 
-[testenv]
-deps = pytest
-commands = pytest -rs --pyargs {posargs:emeraldtree}
-"""
+[tool.tox.env.py]
+deps = ["pytest"]
+commands = [
+    ["pytest", "-rs", "--pyargs", "{posargs:emeraldtree}"]
+]
