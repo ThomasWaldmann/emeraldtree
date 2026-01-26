@@ -232,7 +232,6 @@ def test_Element_findall_attribute():
     assert len(result) == 0
 
 def test_Element_findall_position():
-    pytest.skip('not supported')
     c1 = Element('c')
     c2 = Element('c')
     text = "text"
@@ -247,6 +246,13 @@ def test_Element_findall_position():
     result = list(b1.findall('c[2]'))
     assert len(result) == 1
     assert result[0] is c2
+
+def test_Element_findall_position_invalid():
+    b1 = Element('b')
+    with pytest.raises(SyntaxError):
+        list(b1.findall('c[0]'))
+    with pytest.raises(SyntaxError):
+        list(b1.findall('c[-1]'))
 
 def test_Element_findtext_default():
     elem = Element('a')
