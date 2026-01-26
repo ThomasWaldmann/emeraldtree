@@ -146,10 +146,21 @@ def prepare_predicate(next, token):
         token = next()
         if token[0] != "]":
             raise SyntaxError("invalid node predicate")
-        def select(context, result):
-            for elem in result:
-                if elem.find(tag) is not None:
-                    yield elem
+        try:
+            index = int(tag)
+        except ValueError:
+            def select(context, result):
+                for elem in result:
+                    if elem.find(tag) is not None:
+                        yield elem
+        else:
+            if index < 1:
+                raise SyntaxError("XPath position >= 1 expected")
+            def select(context, result):
+                for i, elem in enumerate(result):
+                    if i + 1 == index:
+                        yield elem
+                        break
     else:
         raise SyntaxError("invalid predicate")
     return select
