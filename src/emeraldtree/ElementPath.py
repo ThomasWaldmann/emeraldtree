@@ -106,6 +106,10 @@ def prepare_dot_dot(next, token):
         if parent_map is None:
             context.parent_map = parent_map = {}
             for p in context.root.iter():
+                try:
+                    iter(p)
+                except TypeError:
+                    continue
                 for e in p:
                     parent_map[e] = p
         for elem in result:

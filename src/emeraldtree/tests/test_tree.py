@@ -170,18 +170,23 @@ def test_Element_findall_bracketed_tag():
     assert result[0] is b1 # b1 has 'c' childs
 
 def test_Element_findall_dotdot():
-    pytest.skip('broken')
-    c1 = Element('c')
-    c2 = Element('c')
+    d1 = Element('d')
+    d2 = Element('d')
     text = "text"
-    b1 = Element('b', children=(c1, text, c2))
-    b2 = Element('b')
-    a1 = Element('a', children=(b1, b2, ))
-    
+    c1 = Element('c', children=(d1, text, d2))
+    b1 = Element('b')
+    a1 = Element('a', children=(b1, c1, ))
+
+    # this is something we can not support.
+    # we do not have parent pointers and also we only have a context starting from c1 here.
+    # we give an empty result, similar to stdlib elementree, which has the same limitation.
     result = list(c1.findall('../c'))
-    assert len(result) == 2
+    assert len(result) == 0
+
+    # this is something we can support as we start at a higher element.
+    result = list(a1.findall('b/../c'))
+    assert len(result) == 1
     assert result[0] is c1
-    assert result[1] is c2
 
 def test_Element_findall_slashslash():
     c1 = Element('c')
