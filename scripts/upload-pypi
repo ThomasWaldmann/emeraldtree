@@ -8,11 +8,11 @@ if [ "$R" = "" ]; then
 fi
 
 if [ "$2" = "test" ]; then
-    export TWINE_REPOSITORY=testpypi
+    export TWINE_REPOSITORY=testemeraldtree
 else
-    export TWINE_REPOSITORY=pypi
+    export TWINE_REPOSITORY=emeraldtree
 fi
 
 D=dist/emeraldtree-$R.tar.gz
 
-twine upload --repository=emeraldtree "$D"
+twine upload "$D"

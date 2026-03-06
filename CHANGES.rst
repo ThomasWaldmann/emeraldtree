@@ -1,8 +1,15 @@
 Change Log
 ==========
 
-Version 0.12.0 (not released yet)
----------------------------------
+Version 0.12.0 (2026-03-06)
+---------------------------
+
+New features:
+
+- improved XPath support:
+
+  - support .// and ..
+  - support [position]
 
 Other changes:
 
